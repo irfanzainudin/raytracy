@@ -26,24 +26,10 @@ pub fn helloworld() {
         std::io::stderr().flush().expect("flush failed");
         
         for i in 0..image_width {
-            // Old working method
-            // let r = (i as f64) / (image_width as f64 - 1.0);
-            // let g = (j as f64) / (image_height as f64 - 1.0);
-            // let b = 0.0;
-
-            // let ir = (255.999 * r) as i64;
-            // let ig = (255.999 * g) as i64;
-            // let ib = (255.999 * b) as i64;
-
-            // let img_data = format!("{} {} {}\n", ir, ig, ib);
-            // let _ = data_file
-            //     .write(img_data.as_bytes())
-            //     .expect("writing img_data failed");
-
-            // [WIP] New abstracted and condensed method
             let pixel_colour = vec3::Colour {
                 e: [(i as f64)/(image_width as f64 - 1.0), (j as f64)/(image_height as f64 - 1.0), 0.0]
             };
+            
             // TODO: Once the function signature is changed, change this too
             // write_color(std::cout, pixel_color);
             vec3::write_colour(&mut data_file, &pixel_colour);

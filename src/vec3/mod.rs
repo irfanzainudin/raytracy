@@ -39,12 +39,6 @@ impl Vec3 {
     }
 }
 
-trait MulScalar {
-    type Output;
-    
-    fn mul_scalar(v: &Vec3, s: f64) -> Self::Output;
-}
-
 trait MulAssignScalar {
     fn mul_assign_scalar(&mut self, s: f64);
 }
@@ -103,16 +97,6 @@ impl Mul for Vec3 {
     fn mul(self, rhs: Self) -> Self::Output {
         Vec3 {
             e: [self.e[0] * rhs.e[0], self.e[1] * rhs.e[1], self.e[2] * rhs.e[2]]
-        }
-    }
-}
-
-impl MulScalar for Vec3 {
-    type Output = Self;
-
-    fn mul_scalar(v: &Vec3, s: f64) -> Self::Output {
-        Vec3 {
-            e: [s * v.e[0], s * v.e[1], s * v.e[2]]
         }
     }
 }
@@ -179,17 +163,23 @@ impl IndexMut<usize> for Vec3 {
 
 pub type Point3 = Vec3;
 
-fn div_scalar(v: &Vec3, s: &f64) -> Vec3 {
+pub fn mul_scalar(v: &Vec3, s: &f64) -> Vec3 {
+    Vec3 {
+        e: [s * v.e[0], s * v.e[1], s * v.e[2]]
+    }
+}
+
+pub fn div_scalar(v: &Vec3, s: &f64) -> Vec3 {
     Vec3 {
         e: [(1.0 / s) * v.e[0], (1.0 / s) * v.e[1], (1.0 / s) * v.e[2]]
     }
 }
 
-fn dot(u: &Vec3, v: &Vec3) -> f64 {
+pub fn dot(u: &Vec3, v: &Vec3) -> f64 {
     (u.e[0] * v.e[0]) + (u.e[1] * v.e[1]) + (u.e[2] * v.e[2])
 }
 
-fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
+pub fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
     Vec3 {
         e: [
             (u.e[1] * v.e[2]) - (u.e[2] * v.e[1]),
@@ -199,16 +189,15 @@ fn cross(u: &Vec3, v: &Vec3) -> Vec3 {
     }
 }
 
-fn unit_vector(v: &Vec3, v_length: &f64) -> Vec3 {
+pub fn unit_vector(v: &Vec3, v_length: &f64) -> Vec3 {
     div_scalar(v, v_length)
 }
 
 pub type Colour = Vec3;
 
-// TODO: Change the function signature to this
-// fn write_colour(out: Iterator, pixel_colour: Colour) {
+// TODO: Change the function signature (defined in C++) to this
+// void write_color(std::ostream& out, const color& pixel_color)
 pub fn write_colour(data_file: &mut std::fs::File, pixel_colour: &Colour) {
-// pub fn write_colour(x: &f64, y: &f64, z: &f64) {
     // let r = x;
     // let g = y;
     // let b = z;
